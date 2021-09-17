@@ -1,22 +1,49 @@
-import * as React from 'react';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@material-ui/data-grid';
-
+import React, {useState} from 'react';
+import { DataGrid, GridColDef, GridValueGetterParams, GridSelectionModel } from '@material-ui/data-grid';
+import { server_calls } from '../../api'; 
+import { useGetData } from '../../custom-hooks';
+import { Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle } from '@material-ui/core'; 
+import { HeroForm } from '../../components/HeroForm';
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 110 },
-    { field: 'name', headerName: 'Hero Name', width: 150, editable: true, },
-    { field: 'alias', headerName: 'Alias', width: 140, editable: true, },
+    { 
+      field: 'id', 
+      headerName: 'ID', 
+      width: 110 
+    },
+    { 
+      field: 'name', 
+      headerName: 'Hero Name', 
+      width: 150, 
+      editable: true, 
+    },
+    { 
+      field: 'alias', 
+      headerName: 'Alias', 
+      width: 140, 
+      editable: true, 
+    },
+    { 
+      field: 'powers', 
+      headerName: 'Powers', 
+      width: 400, 
+      editable: true, 
+    },
     {
-      field: 'number_comics',
+      field: 'comics_appeared_in',
       headerName: 'Comics Appeared In',
       type: 'number',
-      width: 220,
+      width: 210,
       editable: true,   
     },
     {
       field: 'base_of_operations',
       headerName: 'Base of Operations',
-    //   description: 'This column has a value getter and is not sortable.',  ** THIS IS NEEDED WHEN USING valueGetter()
       sortable: true,
       width: 200,
       editable: true,
@@ -25,20 +52,52 @@ const columns: GridColDef[] = [
     },
   ];
 
-  const rows = [
-    { id: 1, name: 'Superman', alias: 'Clark Kent', number_comics: 35, base_of_operations: 'Metropolis' },
-    { id: 2, name: 'Batman', alias: 'Bruce Wayne', number_comics: 42, base_of_operations: 'Gotham City' },
-    { id: 3, name: 'Green Arrow', alias: 'Oliver Queen', number_comics: 45, base_of_operations: 'Star City' },
-  ];
 
 
 
-
-  export const DataTable = () => {
-    return (
-        <div style={{ height: 400, width: '100%' }}>
-          <h2>Heroes in Inventory</h2>
-          <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
-        </div>
-      );
-}
+  export const DataTable =  () => {
+  
+    let { heroData, getData } = useGetData();
+    let [open, setOpen] = useState(false);
+    let [gridData, setData] = useState<GridSelectionModel>([])
+  
+    let handleOpen = () => {
+      setOpen(true)
+    }
+  
+    let handleClose = () => {
+      setOpen(false)
+    }
+  
+    let deleteData = () => {
+      server_calls.delete(`${gridData[0]}`)
+      getData()
+    }
+  
+  
+      return (
+          <div style={{ height: 400, width: '100%' }}>
+            <h2>Heroes Recruited</h2>
+            <DataGrid rows={heroData} columns={columns} pageSize={5} checkboxSelection onSelectionModelChange={(newSelectionModel) => {
+              setData(newSelectionModel);
+            }}
+            selectionModel={gridData}
+            {...heroData}/>
+  
+          <Button onClick={handleOpen} color='primary' variant='contained'>Update</Button>
+          <Button variant="contained" color="secondary" onClick={deleteData}>Delete</Button>
+  
+            {/*Dialog Pop Up begin */}
+          <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+            <DialogTitle id="form-dialog-title">Update Your Hero</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Hero: {gridData[0]}</DialogContentText>
+                <HeroForm id={`${gridData[0]}`}/>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick = {handleClose} color="primary">Cancel</Button>
+            </DialogActions>
+          </Dialog>
+          </div>
+        );
+  }

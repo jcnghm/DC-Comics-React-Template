@@ -1,17 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Home, Dashboard, SignIn, SignUp } from './components';
+import { Home, Dashboard, SignIn, Heroes } from './components';
 import './styles.css';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import { store } from './redux/store';
+import { FirebaseAppProvider, AuthCheck } from 'reactfire'; 
+import 'firebase/auth'; 
+import { firebaseConfig } from './firebaseConfig'
 
 ReactDOM.render(
   <React.StrictMode>
+    <FirebaseAppProvider firebaseConfig={firebaseConfig}>
+    <Provider store = { store }> 
     <Router>
       <Switch>
 
         <Route exact path='/'>
-          <Home title={'DC Comics API'} />
+          <Home title={'DC Comics Heroes'} />
+        </Route>
+
+        <Route exact path='/heroes'>
+          <Heroes hero_title={'Hero Gallary'}/>
         </Route>
 
         <Route path='/dashboard'>
@@ -21,13 +32,10 @@ ReactDOM.render(
         <Route path='/signin'>
           <SignIn></SignIn>
         </Route>
-
-        <Route path='/signup'>
-          <SignUp></SignUp>
-        </Route>
-
       </Switch>
     </Router>
+    </Provider>
+    </FirebaseAppProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );

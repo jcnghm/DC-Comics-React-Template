@@ -1,20 +1,22 @@
 import React from 'react';
 
-// Imports for Styling
 import { makeStyles } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import background_image from '../../assets/images/background2.jpg';
-import logo_image from '../../assets/images/dclogo3.png'
-
 import { Link } from 'react-router-dom';
+import logo_image from '../../assets/images/dclogo3.png'
 import { AuthCheck } from 'reactfire'; 
 import { Suspense } from 'react';
+import { Container, Row, Col, Image } from 'react-bootstrap'
+import batman from '../../assets/images/batman.jpg'
+import green_arrow from '../../assets/images/Green-arrow.jpg'
+import theFlash from '../../assets/images/flash.jpeg'
+import background_image from '../../assets/images/background2.jpg'
+
+
 
 interface Props{
-    title: string;
+    hero_title: string;
 }
 
-// New Make Styles Code
 const useStyles = makeStyles({
     
     root: {
@@ -38,9 +40,10 @@ const useStyles = makeStyles({
         textTransformation: 'uppercase',
         textDecoration: 'none',
         color: 'white',
+        backgroundColor: 'black',
     },
     navigation: {
-        display: 'flex'
+        display: 'flex',
     },
     nav_a: {
         display: 'block',
@@ -55,21 +58,28 @@ const useStyles = makeStyles({
         backgroundSize: 'cover',
         backgroundRepeat: 'no-repeat',
         backgroundPosition: 'center',
-        position: 'absolute'
+        position: 'absolute',
+        color: 'white',
+
     },
     main_text: {
         textAlign: 'center',
         position: 'relative',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
+        display: 'flex',
         color: 'white',
+        justifyContent: 'center',
+
+    },
+    hero_image: {
+        borderRadius: '25px',
+        padding: '15px',
+        '&:hover': {
+            filter: 'brightness(80%)',}
     },
 })
 
-export const Home = ( props:Props) => {
+export const Heroes = ( props:Props) => {
 
-    // New classes variable code
     const classes = useStyles();
 
     return (
@@ -108,14 +118,45 @@ export const Home = ( props:Props) => {
                 </div>
             </nav>
 
-            {/* Main Home Section */}
-            <main className={classes.main}>
+            {/* Hero list section */}
+
+            <main className ={classes.main}>
+            <h1>{ props.hero_title }</h1>
                 <div className={classes.main_text}>
-                    <h1>{ props.title }</h1>
-                    <p></p>
-                    <Button color='primary' variant="contained" onClick={event =>  window.location.href='/dashboard'}>View Hero Dashboard</Button>
+                    <div className={classes.hero_image}>
+                        <Container>
+                            <Row>
+                                <Col xs={6} md={4}>
+                                    <h2>Batman</h2>
+                                    <Image src={batman} className= {classes.hero_image} alt='batman'  />
+                                </Col>
+                            </Row>
+                        </Container>
+                    </div>
+                    <div className={classes.hero_image}>
+                        <Container>
+                            <Row>
+                                <Col xs={6} md={4}>
+                                    <h2>Green Arrow</h2>
+                                    <Image src={green_arrow} className= {classes.hero_image} alt='batman'  />
+                                </Col>
+                                </Row>
+                        </Container>
+                    </div>
+                    <div className={classes.hero_image}>
+                        <Container>
+                            <Row>
+                                <Col xs={6} md={4}>
+                                    <h2>The Flash</h2>
+                                    <Image src={theFlash} className= {classes.hero_image} alt='batman'  />
+                                </Col>
+                                </Row>
+                        </Container>
+                    </div>
+                    
                 </div>
             </main>
+
         </div>
     )
 }

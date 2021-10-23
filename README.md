@@ -1,8 +1,9 @@
 # Comic Book React Template
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+- React/TypeScript website template
 
-React Web App Template
+Created by: [Joshua Cunningham](https://www.linkedin.com/in/joshua-cunningham-wa/)
+
 
 ![Site Image Example](https://github.com/jcnghm/DC-Comics-React-Template/blob/master/src/assets/images/example1.PNG)
 
